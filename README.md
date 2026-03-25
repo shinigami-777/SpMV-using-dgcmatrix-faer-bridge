@@ -7,9 +7,9 @@ This package provides two implementations for sparse matrix-vector multiplicatio
 1. **`sparse_matvec()`** - Uses dgcmatrix-faer-bridge conversion to construct sparse matrix, then performs sparse matrix-vector multiplication using CSC format in faer SparseColMat.
 2. **`sparse_matvec_direct()`** - Performs sparse matrix-vector multiplication directly on passed slots without conversion/validation. 
 
-The `sparse_matvec_direct()` is faster since it has no conversion/validation overhead. However, it is more error-prone with bounds that can be easily messed with. We can directly work with the slots for this particular example package, but that won't be true for a lot of cases. The sparse matrix conversion is required for more complex tasks as it is safe and can be more easily extended.
+The `sparse_matvec_direct()` is faster since it has no conversion/validation overhead. However, it is more error-prone with bounds that can be easily messed with. We can directly work with the slots for this particular example package, but that won't be true for a lot of cases. The sparse matrix conversion is required for more complex tasks as it is safe and can be easily extended.
 
-We can compare the difference between `sparse_matvec_direct()` and `sparse_matvec()` to get a approx idea of the conversion/validation overhead used in `dgcmatrix-faer-bridge`.
+We can compare the difference between `sparse_matvec_direct()` and `sparse_matvec()` to get an approx idea of the conversion/validation overhead used in `dgcmatrix-faer-bridge`.
 
 ### Installation
 Clone the repo
@@ -25,14 +25,14 @@ setwd("SPMV")
 rextendr::document()
 ```
 
-Run to the [example-usage](https://github.com/shinigami-777/SpMV-using-dgcmatrix-faer-bridge/blob/main/Rscripts/example-usage.R) to check if it works.
+Run the [example-usage](https://github.com/shinigami-777/SpMV-using-dgcmatrix-faer-bridge/blob/main/Rscripts/example-usage.R) to check if it works.
 
 ### Benchmarks
 
 We compare performance between:
 - `sparse_matvec_pure_r()` (sparse R implementation for SpMV)
 - `sparse_matvec()` (with conversion using dgcmatrix-faer-bridge)
-- `sparse_matvec_direct()` (without conversion from direct slots)
+- `sparse_matvec_direct()` (without conversion; from direct slots)
 
 All of the functions have a time complexity of `O(nnz)` yet they perform differently. The difference between R and Rust is significant. Between the rust ones, `sparse_matvec()` is slower due to the reconstruction and validation overhead. Even with all the overheads, `sparse_matvec()` is 2x faster that the pure R code (for n= 20000) and the speedup becomes even more for larger n. 
 
